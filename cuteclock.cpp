@@ -32,10 +32,10 @@ void cuteClock::setHourAlarmMode(int a_val) {
     m_hourAlarmMode = a_val;
 };
 
-int cuteClock::getHightHours() const {
+int cuteClock::getNightHours() const {
     return m_night_hours;
 };
-void cuteClock::setHightHours(int a_val) {
+void cuteClock::setNightHours(int a_val) {
     m_night_hours = a_val;
 };
 
@@ -59,3 +59,24 @@ int cuteClock::getTimeFormat() const {
 void cuteClock::setTimeFormat(int a_val) {
     m_time_format = a_val;
 };
+
+QTime cuteClock::getTime() const {
+    return time;
+}
+void cuteClock::setTime(QTime& a_val) {
+    time = a_val;
+}
+
+QTime cuteClock::getAlarmTime() const {
+    return alarm_time;
+}
+void cuteClock::setAlarmTime(QTime& a_val) {
+    alarm_time = a_val;
+}
+
+QDate cuteClock::getDate() const {
+    return date;
+}
+void cuteClock::setDate(QDate& a_val) {
+    date = a_val;
+}

@@ -11,11 +11,13 @@ CONFIG += c++11
 
 SOURCES += \
     cuteclock.cpp \
+    cuteclockoperator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     cuteclock.h \
+    cuteclockoperator.h \
     mainwindow.h
 
 FORMS += \

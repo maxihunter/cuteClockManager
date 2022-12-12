@@ -1,6 +1,9 @@
 #ifndef CUTECLOCK_H
 #define CUTECLOCK_H
 
+#include <QTime>
+#include <QDate>
+
 /*ledAction[0] = stripRollingRainbow;
   ledAction[1] = stripStaticRainbow;
   ledAction[2] = stripCircleRainbow;
@@ -27,6 +30,9 @@ private:
     int m_alarm_hours;
     int m_alarm_minutes;
     int m_time_format;
+    QTime time;
+    QTime alarm_time;
+    QDate date;
 public:
     cuteClock();
 
@@ -42,8 +48,8 @@ public:
     int getHourAlarmMode() const;
     void setHourAlarmMode(int a_val);
 
-    int getHightHours() const;
-    void setHightHours(int a_val);
+    int getNightHours() const;
+    void setNightHours(int a_val);
 
     int getAlarmHours() const;
     void setAlarmHours(int a_val);
@@ -53,6 +59,15 @@ public:
 
     int getTimeFormat() const;
     void setTimeFormat(int a_val);
+
+    QTime getTime() const;
+    void setTime(QTime& a_val);
+
+    QTime getAlarmTime() const;
+    void setAlarmTime(QTime& a_val);
+
+    QDate getDate() const;
+    void setDate(QDate& a_val);
 };
 
 #endif // CUTECLOCK_H

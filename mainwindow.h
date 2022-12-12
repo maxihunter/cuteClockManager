@@ -19,7 +19,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_pressed();
+    void clickedConnectButton();
 
 private:
     Ui::MainWindow *ui;
