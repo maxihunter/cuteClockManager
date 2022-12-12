@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     connect(ui->buttonConnect, &QPushButton::clicked, this, &MainWindow::clickedConnectButton);
+    connect(ui->buttonDisconnet, &QPushButton::clicked, this, &MainWindow::clickedDisconnectButton);
 
 }
 
@@ -45,4 +46,62 @@ MainWindow::~MainWindow()
 void MainWindow::clickedConnectButton() {
     ui->buttonConnect->setEnabled(false);
     ui->comboBox->setEnabled(false);
+
+    serial.setPortName(ui->comboBox->currentText());
+    if(!serial.setBaudRate(QSerialPort::Baud9600 , QSerialPort::AllDirections))
+        qDebug() << serial.errorString();
+    if(!serial.setDataBits(QSerialPort::Data8))
+        qDebug() << serial.errorString();
+    if(!serial.setParity(QSerialPort::EvenParity))
+        qDebug() << serial.errorString();
+    if(!serial.setFlowControl(QSerialPort::NoFlowControl))
+        qDebug() << serial.errorString();
+    if(!serial.setStopBits(QSerialPort::OneStop))
+        qDebug() << serial.errorString();
+    qDebug() << serial.bytesAvailable();
+
+    if (serial.isOpen()) {
+        qDebug() << "Serial port is open...";
+        QByteArray datas = serial.readAll();
+    }
 }
+
+void MainWindow::clickedDisconnectButton() {
+    serial.close();
+}
+
+/*
+QSerialPort serial;
+serial.setPortName("ttyUSB0");
+if(!serial.setBaudRate(QSerialPort::Baud1200 , QSerialPort::Input))
+    qDebug() << serial.errorString();
+if(!serial.setDataBits(QSerialPort::Data7))
+    qDebug() << serial.errorString();
+if(!serial.setParity(QSerialPort::EvenParity))
+    qDebug() << serial.errorString();
+if(!serial.setFlowControl(QSerialPort::HardwareControl))
+    qDebug() << serial.errorString();
+if(!serial.setStopBits(QSerialPort::OneStop))
+    qDebug() << serial.errorString();
+if(!serial.open(QIODevice::ReadOnly))
+    qDebug() << serial.errorString();
+qDebug() << serial.bytesAvailable();
+while(true)
+{
+    if (serial.isOpen()) {
+        qDebug() << "Serial port is open...";
+        QByteArray datas = serial.readAll();
+        if (datas.size() == 0) {
+            qDebug() << "Arrived data: 0";
+        } else {
+            for (int i = 0; i < datas.size(); i++){
+                if (datas.at(i)) {
+                    qDebug() << datas[i];
+                }
+            }
+        }
+
+    } else {
+        qDebug() << "OPEN ERROR: " << serial.errorString();
+    }
+}*/
