@@ -2,29 +2,34 @@
 #define CUTECLOCKOPERATOR_H
 
 #include <QObject>
+#include <QSerialPort>
 
 class cuteClock;
 
 class cuteClockOperator
 {
 public:
-    cuteClockOperator();
+    cuteClockOperator(QSerialPort* serial);
 
-    static bool testClock();
-    static bool readClockConfig(cuteClock* clock);
+    bool testClock();
+    bool getClockInfo(cuteClock* clock);
+    bool readClockConfig(cuteClock* clock);
 
-    static bool setClockMode(cuteClock* clock);
-    static bool setLEDMode(cuteClock* clock);
-    static bool setHSVMode(cuteClock* clock);
-    static bool setTime(cuteClock* clock);
-    static bool setDate(cuteClock* clock);
+    bool setClockMode(cuteClock* clock);
+    bool setLEDMode(cuteClock* clock);
+    bool setHSVMode(cuteClock* clock);
+    bool setTime(cuteClock* clock);
+    bool setDate(cuteClock* clock);
 
-    static bool setHourAlarmMode(cuteClock* clock);
-    static bool setNightHours(cuteClock* clock);
-    static bool setAlarmHours(cuteClock* clock);
-    static bool setAlarmMinutes(cuteClock* clock);
-    static bool setTimeFormat(cuteClock* clock);
-    static bool setAlarmTime(cuteClock* clock);
+    bool setHourAlarmMode(cuteClock* clock);
+    bool setNightHours(cuteClock* clock);
+    bool setAlarmHours(cuteClock* clock);
+    bool setAlarmMinutes(cuteClock* clock);
+    bool setTimeFormat(cuteClock* clock);
+    bool setAlarmTime(cuteClock* clock);
+
+private:
+    QSerialPort* m_serial;
 
 };
 

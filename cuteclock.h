@@ -4,20 +4,16 @@
 #include <QTime>
 #include <QDate>
 
-/*ledAction[0] = stripRollingRainbow;
-  ledAction[1] = stripStaticRainbow;
-  ledAction[2] = stripCircleRainbow;
-  ledAction[3] = stripPulseRainbow;
-  ledAction[4] = stripArrowDots;
-  ledAction[5] = stripArrowOverlap;
-  ledAction[6] = stripArrowDotsSec;
-  ledAction[7] = stripArrowOverlapSec;
-  ledAction[8] = stripStaticCustom;
-  ledAction[9] = stripPulseCustom;
-*/
+class clockVersion;
+
 class cuteClock
 {
 private:
+
+    int m_version_major;
+    int m_version_minor;
+    int m_revision_num;
+
     int m_ledMode;
     int m_ledBrightness;
     int m_hsvMode;
@@ -33,8 +29,19 @@ private:
     QTime time;
     QTime alarm_time;
     QDate date;
+    clockVersion m_version;
+
 public:
     cuteClock();
+
+    int getVersionMajor() const;
+    int getVersionMinor() const;
+    clockVersion getVersion() const;
+    void setVersion(int a_major, int a_minor);
+    void setVersion(clockVersion a_ver);
+
+    int getRevision() const;
+    void setRevision(int a_rev);
 
     int getLedMode() const;
     void setLedMode(int a_val);

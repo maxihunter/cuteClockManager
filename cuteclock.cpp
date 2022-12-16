@@ -1,7 +1,45 @@
 #include "cuteclock.h"
+#include "clockversion.h"
 
 cuteClock::cuteClock()
 {
+}
+
+int cuteClock::getVersionMajor() const
+{
+    return m_version_major;
+}
+
+int cuteClock::getVersionMinor() const
+{
+    return m_version_minor;
+}
+
+clockVersion cuteClock::getVersion() const
+{
+    return m_version;
+}
+
+void cuteClock::setVersion(int a_major, int a_minor)
+{
+    m_version_major = a_major;
+    m_version_minor = a_minor;
+    m_version.setVersion(a_major, a_minor);
+}
+
+void cuteClock::setVersion(clockVersion a_ver)
+{
+    m_version = a_ver;
+}
+
+int cuteClock::getRevision() const
+{
+    return m_revision_num;
+}
+
+void cuteClock::setRevision(int a_rev)
+{
+    m_revision_num = a_rev;
 }
 
 int cuteClock::getLedMode() const {

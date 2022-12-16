@@ -1,18 +1,39 @@
 #include "cuteclockoperator.h"
 #include "cuteclock.h"
 
-cuteClockOperator::cuteClockOperator()
-{
-
-}
+cuteClockOperator::cuteClockOperator(QSerialPort* a_serial):
+    m_serial(a_serial) {}
 
 bool cuteClockOperator::testClock() {
+    QString msg = "T\n";
+    m_serial->write(msg);
+    QString data = serial->readAll();
+    if (data != "TESTOK")
+        return false;
     return true;
 }
+
+bool cuteClockOperator::getClockInfo(cuteClock* clock) {
+    QString msg = "V\n";
+    m_serial->write(msg);
+    QString data = m_serial->readAll();
+    if (data.length() <= 0)
+        return false;
+    QStringList conf_str = data.split("|");
+    if (conf_str.size() <= 0)
+        return false;
+    QStringList version = conf_str[0].split(".");
+    if (conf_str.size() <= 0)
+        return false;
+    clock->setVersion(version[0].toInt(), version[1].toInt());
+    clock->setRevision(conf_str[1].toInt());
+    return true;
+}
+
 bool cuteClockOperator::readClockConfig(cuteClock* clock) {
     QString msg;
     // Do some magic with serial port
-    QString conf_str = msg.split(":")[1];
+    QString conf_str = msg.split("|")[1];
     QStringList args = conf_str.split(";");
     for (auto it = args.begin(); it < args.end(); it++) {
         QStringList values = (*it).split("=");
