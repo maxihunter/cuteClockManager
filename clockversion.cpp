@@ -5,19 +5,20 @@ clockVersion::clockVersion()
 }
 
 int clockVersion::getVersionMajor() const {
-
+    return m_version_major;
 }
 
 int clockVersion::getVersionMinor() const {
-
+    return m_version_minor;
 }
 
 void clockVersion::setVersion(int a_major, int a_minor) {
-
+    m_version_major = a_major;
+    m_version_minor = a_minor;
 }
 
 QString clockVersion::toString() const {
-
+    return QString("v%1.%2").arg(m_version_major).arg(m_version_minor);
 }
 
 clockVersion& clockVersion::operator=(const clockVersion& a_val) {

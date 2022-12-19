@@ -9,7 +9,9 @@ class cuteClock;
 class cuteClockOperator
 {
 public:
-    cuteClockOperator(QSerialPort* serial);
+    cuteClockOperator();
+    
+    void setSerial(QSerialPort& serial);
 
     bool testClock();
     bool getClockInfo(cuteClock* clock);

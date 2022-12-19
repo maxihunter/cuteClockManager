@@ -7,6 +7,8 @@
 #include <QComboBox>
 #include <QDebug>
 
+#include "cuteclockoperator.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -26,5 +28,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QSerialPort serial;
+    cuteClockOperator m_clockOperator;
 };
 #endif // MAINWINDOW_H

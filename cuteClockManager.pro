@@ -10,13 +10,15 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    cuteclock.cpp \
+    clockversion.cpp \
+	cuteclock.cpp \
     cuteclockoperator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    cuteclock.h \
+    clockversion.h \
+	cuteclock.h \
     cuteclockoperator.h \
     mainwindow.h
 

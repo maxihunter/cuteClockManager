@@ -1,13 +1,18 @@
 #include "cuteclockoperator.h"
 #include "cuteclock.h"
 
-cuteClockOperator::cuteClockOperator(QSerialPort* a_serial):
-    m_serial(a_serial) {}
+cuteClockOperator::cuteClockOperator()
+{}
+
+void cuteClockOperator::setSerial(QSerialPort& serial)
+{
+    m_serial = &serial;
+}
 
 bool cuteClockOperator::testClock() {
     QString msg = "T\n";
-    m_serial->write(msg);
-    QString data = serial->readAll();
+    m_serial->write(msg.toUtf8());
+    QString data = m_serial->readAll();
     if (data != "TESTOK")
         return false;
     return true;
@@ -15,7 +20,7 @@ bool cuteClockOperator::testClock() {
 
 bool cuteClockOperator::getClockInfo(cuteClock* clock) {
     QString msg = "V\n";
-    m_serial->write(msg);
+    m_serial->write(msg.toUtf8());
     QString data = m_serial->readAll();
     if (data.length() <= 0)
         return false;

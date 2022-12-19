@@ -1,5 +1,5 @@
 #include "cuteclock.h"
-#include "clockversion.h"
+
 
 cuteClock::cuteClock()
 {

@@ -4,7 +4,9 @@
 #include <QTime>
 #include <QDate>
 
-class clockVersion;
+#include "clockversion.h"
+
+//class clockVersion;
 
 class cuteClock
 {

@@ -60,14 +60,22 @@ void MainWindow::clickedConnectButton() {
         qDebug() << serial.errorString();
     qDebug() << serial.bytesAvailable();
 
+    serial.open(QIODevice::ReadWrite);
     if (serial.isOpen()) {
-        qDebug() << "Serial port is open...";
+        
         QByteArray datas = serial.readAll();
+        qDebug() << "Serial port is open...";
     }
+    m_clockOperator.setSerial(serial);
 }
 
 void MainWindow::clickedDisconnectButton() {
-    serial.close();
+    //serial.close();
+    QByteArray datas = serial.readAll();
+    qDebug() << "Serial port is open..." << datas;
+    if (m_clockOperator.testClock()) {
+        qDebug() << "m_clockOperator.testClock...OK";
+    }
 }
 
 /*
