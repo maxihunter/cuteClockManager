@@ -2,6 +2,7 @@
 #define CUTECLOCKOPERATOR_H
 
 #include <QObject>
+#include <QDebug>
 #include <QSerialPort>
 
 class cuteClock;

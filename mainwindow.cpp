@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->buttonConnect, &QPushButton::clicked, this, &MainWindow::clickedConnectButton);
     connect(ui->buttonDisconnet, &QPushButton::clicked, this, &MainWindow::clickedDisconnectButton);
+    connect(ui->buttonTest, &QPushButton::clicked, this, &MainWindow::clickedTestButton);
 
 }
 
@@ -44,15 +45,12 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::clickedConnectButton() {
-    ui->buttonConnect->setEnabled(false);
-    ui->comboBox->setEnabled(false);
-
     serial.setPortName(ui->comboBox->currentText());
     if(!serial.setBaudRate(QSerialPort::Baud9600 , QSerialPort::AllDirections))
         qDebug() << serial.errorString();
     if(!serial.setDataBits(QSerialPort::Data8))
         qDebug() << serial.errorString();
-    if(!serial.setParity(QSerialPort::EvenParity))
+    if(!serial.setParity(QSerialPort::NoParity))
         qDebug() << serial.errorString();
     if(!serial.setFlowControl(QSerialPort::NoFlowControl))
         qDebug() << serial.errorString();
@@ -62,54 +60,30 @@ void MainWindow::clickedConnectButton() {
 
     serial.open(QIODevice::ReadWrite);
     if (serial.isOpen()) {
-        
-        QByteArray datas = serial.readAll();
         qDebug() << "Serial port is open...";
+        QByteArray datas = serial.readAll();
+    } else {
+        QMessageBox::critical(this, "Error", "Serial port \""+ui->comboBox->currentText()+"\" cannot be opened.", QMessageBox::Ok);
+        return;
     }
+    ui->buttonConnect->setEnabled(false);
+    ui->comboBox->setEnabled(false);
     m_clockOperator.setSerial(serial);
 }
 
 void MainWindow::clickedDisconnectButton() {
-    //serial.close();
-    QByteArray datas = serial.readAll();
-    qDebug() << "Serial port is open..." << datas;
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Really?", "Are you sure you want to disconnect?",
+                                  QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        qDebug() << "Yes was clicked";
+        //QApplication::quit();
+        serial.close();
+    }
+}
+
+void MainWindow::clickedTestButton() {
     if (m_clockOperator.testClock()) {
         qDebug() << "m_clockOperator.testClock...OK";
     }
 }
-
-/*
-QSerialPort serial;
-serial.setPortName("ttyUSB0");
-if(!serial.setBaudRate(QSerialPort::Baud1200 , QSerialPort::Input))
-    qDebug() << serial.errorString();
-if(!serial.setDataBits(QSerialPort::Data7))
-    qDebug() << serial.errorString();
-if(!serial.setParity(QSerialPort::EvenParity))
-    qDebug() << serial.errorString();
-if(!serial.setFlowControl(QSerialPort::HardwareControl))
-    qDebug() << serial.errorString();
-if(!serial.setStopBits(QSerialPort::OneStop))
-    qDebug() << serial.errorString();
-if(!serial.open(QIODevice::ReadOnly))
-    qDebug() << serial.errorString();
-qDebug() << serial.bytesAvailable();
-while(true)
-{
-    if (serial.isOpen()) {
-        qDebug() << "Serial port is open...";
-        QByteArray datas = serial.readAll();
-        if (datas.size() == 0) {
-            qDebug() << "Arrived data: 0";
-        } else {
-            for (int i = 0; i < datas.size(); i++){
-                if (datas.at(i)) {
-                    qDebug() << datas[i];
-                }
-            }
-        }
-
-    } else {
-        qDebug() << "OPEN ERROR: " << serial.errorString();
-    }
-}*/

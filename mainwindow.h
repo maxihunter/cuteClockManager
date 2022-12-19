@@ -5,6 +5,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QComboBox>
+#include <QMessageBox>
 #include <QDebug>
 
 #include "cuteclockoperator.h"
@@ -24,6 +25,7 @@ public:
 private slots:
     void clickedConnectButton();
     void clickedDisconnectButton();
+    void clickedTestButton();
 
 private:
     Ui::MainWindow *ui;

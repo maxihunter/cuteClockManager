@@ -12,6 +12,13 @@ void cuteClockOperator::setSerial(QSerialPort& serial)
 bool cuteClockOperator::testClock() {
     QString msg = "T\n";
     m_serial->write(msg.toUtf8());
+    if(!m_serial->waitForReadyRead(5000)) { //block until new data arrives
+        qDebug() << "error: " << m_serial->errorString();
+    } else{
+        qDebug() << "New data available: " << m_serial->bytesAvailable();
+        QByteArray datas = m_serial->readAll();
+        qDebug() << datas;
+    }
     QString data = m_serial->readAll();
     if (data != "TESTOK")
         return false;
