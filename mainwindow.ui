@@ -54,7 +54,7 @@
        <item>
         <widget class="QLabel" name="label_sunriseprerun">
          <property name="text">
-          <string>Sunrice prerun:</string>
+          <string>Sunrise pre-run:</string>
          </property>
         </widget>
        </item>

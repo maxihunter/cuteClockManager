@@ -54,8 +54,8 @@ public:
     int getHsvMode() const;
     void setHsvMode(int a_val);
 
-    int getHourAlarmMode() const;
-    void setHourAlarmMode(int a_val);
+    int getAlarmMode() const;
+    void setAlarmMode(int a_val);
 
     int getNightHours() const;
     void setNightHours(int a_val);

@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     ui->lineEditHsv->setReadOnly(true);
 
+    ui->spinBox->setMinimum(0);
+    ui->spinBox->setMaximum(23);
+
     QWidget w;
     Q_FOREACH(QSerialPortInfo port, QSerialPortInfo::availablePorts()) {
         ui->comboBox->addItem(port.portName());
@@ -36,7 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->buttonConnect, &QPushButton::clicked, this, &MainWindow::clickedConnectButton);
     connect(ui->buttonDisconnet, &QPushButton::clicked, this, &MainWindow::clickedDisconnectButton);
     connect(ui->buttonTest, &QPushButton::clicked, this, &MainWindow::clickedTestButton);
-
+    connect(ui->button_getFromPc, &QPushButton::clicked, this, &MainWindow::clickedGetFromPcButton);
+    connect(ui->button_getFromDevice, &QPushButton::clicked, this, &MainWindow::clickedGetFromDeviceButton);
 }
 
 MainWindow::~MainWindow()
@@ -45,45 +49,79 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::clickedConnectButton() {
-    serial.setPortName(ui->comboBox->currentText());
-    if(!serial.setBaudRate(QSerialPort::Baud9600 , QSerialPort::AllDirections))
-        qDebug() << serial.errorString();
-    if(!serial.setDataBits(QSerialPort::Data8))
-        qDebug() << serial.errorString();
-    if(!serial.setParity(QSerialPort::NoParity))
-        qDebug() << serial.errorString();
-    if(!serial.setFlowControl(QSerialPort::NoFlowControl))
-        qDebug() << serial.errorString();
-    if(!serial.setStopBits(QSerialPort::OneStop))
-        qDebug() << serial.errorString();
-    qDebug() << serial.bytesAvailable();
+    m_serial.setPortName(ui->comboBox->currentText());
+    if(!m_serial.setBaudRate(QSerialPort::Baud9600 , QSerialPort::AllDirections))
+        qDebug() << m_serial.errorString();
+    if(!m_serial.setDataBits(QSerialPort::Data8))
+        qDebug() << m_serial.errorString();
+    if(!m_serial.setParity(QSerialPort::NoParity))
+        qDebug() << m_serial.errorString();
+    if(!m_serial.setFlowControl(QSerialPort::NoFlowControl))
+        qDebug() << m_serial.errorString();
+    if(!m_serial.setStopBits(QSerialPort::OneStop))
+        qDebug() << m_serial.errorString();
+    qDebug() << m_serial.bytesAvailable();
 
-    serial.open(QIODevice::ReadWrite);
-    if (serial.isOpen()) {
+    m_serial.open(QIODevice::ReadWrite);
+    if (m_serial.isOpen()) {
         qDebug() << "Serial port is open...";
-        QByteArray datas = serial.readAll();
+        QByteArray datas = m_serial.readAll();
     } else {
         QMessageBox::critical(this, "Error", "Serial port \""+ui->comboBox->currentText()+"\" cannot be opened.", QMessageBox::Ok);
         return;
     }
     ui->buttonConnect->setEnabled(false);
     ui->comboBox->setEnabled(false);
-    m_clockOperator.setSerial(serial);
+    m_clockOperator.setSerial(m_serial);
+    //m_clockOperator.getClockInfo(&m_clock);
 }
 
 void MainWindow::clickedDisconnectButton() {
+    if (ui->comboBox->isEnabled())
+        return;
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Really?", "Are you sure you want to disconnect?",
                                   QMessageBox::Yes|QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         qDebug() << "Yes was clicked";
         //QApplication::quit();
-        serial.close();
+        m_serial.close();
+        ui->buttonConnect->setEnabled(true);
+        ui->comboBox->setEnabled(true);
     }
 }
 
 void MainWindow::clickedTestButton() {
     if (m_clockOperator.testClock()) {
+        QMessageBox::information(this, "Ok", "Clock connection is OKey",
+            QMessageBox::Ok);
         qDebug() << "m_clockOperator.testClock...OK";
+    } else {
+        QMessageBox::critical(this, "Error", "Clock doesn't responding", QMessageBox::Ok);
+        qDebug() << "m_clockOperator.testClock...Failed";
     }
+    readClockConfig();
+}
+
+void MainWindow::clickedGetFromPcButton()
+{
+    QTime time = QTime::currentTime();
+    ui->timeEdit->setTime(time);
+    QDate date = QDate::currentDate();
+    ui->dateEdit->setDate(date);
+}
+
+void MainWindow::clickedGetFromDeviceButton()
+{
+    ui->timeEdit->setTime(m_clock.getTime());
+    ui->dateEdit->setDate(m_clock.getDate());
+}
+
+bool MainWindow::readClockConfig()
+{
+    if (!m_clockOperator.readClockConfig(&m_clock)) {
+        return false;
+    }
+
+    return true;
 }

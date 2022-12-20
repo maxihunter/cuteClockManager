@@ -31,8 +31,14 @@ public:
     bool setTimeFormat(cuteClock* clock);
     bool setAlarmTime(cuteClock* clock);
 
+    QString getLastError() const;
+
 private:
+
+    bool sendCommand(QString& output, QString command);
+
     QSerialPort* m_serial;
+    QString lastError;
 
 };
 

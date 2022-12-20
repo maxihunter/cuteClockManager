@@ -63,10 +63,10 @@ void cuteClock::setHsvMode(int a_val) {
     m_hsvMode = a_val;
 };
 
-int cuteClock::getHourAlarmMode() const {
+int cuteClock::getAlarmMode() const {
     return m_hourAlarmMode;
 };
-void cuteClock::setHourAlarmMode(int a_val) {
+void cuteClock::setAlarmMode(int a_val) {
     m_hourAlarmMode = a_val;
 };
 

@@ -9,6 +9,7 @@
 #include <QDebug>
 
 #include "cuteclockoperator.h"
+#include "cuteclock.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,10 +27,14 @@ private slots:
     void clickedConnectButton();
     void clickedDisconnectButton();
     void clickedTestButton();
-
+    void clickedGetFromPcButton();
+    void clickedGetFromDeviceButton();
+    
 private:
+    bool readClockConfig();
     Ui::MainWindow *ui;
-    QSerialPort serial;
+    QSerialPort m_serial;
+    cuteClock m_clock;
     cuteClockOperator m_clockOperator;
 };
 #endif // MAINWINDOW_H
