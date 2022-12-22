@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     this->setFixedSize(QSize(640, 600));
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    ui->lineEditHsv->setReadOnly(true);
+    //ui->lineEditHsv->setReadOnly(true);
 
     ui->spinBox->setMinimum(0);
     ui->spinBox->setMaximum(23);
@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->buttonTest, &QPushButton::clicked, this, &MainWindow::clickedTestButton);
     connect(ui->button_getFromPc, &QPushButton::clicked, this, &MainWindow::clickedGetFromPcButton);
     connect(ui->button_getFromDevice, &QPushButton::clicked, this, &MainWindow::clickedGetFromDeviceButton);
+    connect(ui->buttonCustomHsv, &QPushButton::clicked, this, &MainWindow::clickedHsvButton);
 }
 
 MainWindow::~MainWindow()
@@ -117,11 +118,67 @@ void MainWindow::clickedGetFromDeviceButton()
     ui->dateEdit->setDate(m_clock.getDate());
 }
 
+void MainWindow::clickedHsvButton()
+{
+    // For debug write config for now
+    int led_mode = ui->comboBox_ledmode->currentIndex();
+    int hsv_mode = ui->lineEditHsv->text().toInt();
+    int beep = ui->checkBox->isChecked();
+    m_clock.setLedMode(led_mode);
+    m_clock.setHsvMode(hsv_mode);
+    m_clock...setHsvMode(hsv_mode);
+    int error = 0;
+    if (!m_clockOperator.setLEDMode(&m_clock)) {
+        error = 1;
+    }
+    if (!m_clockOperator.setHSVMode(&m_clock)) {
+        error = 1;
+    }
+    qDebug() << "returnCode=" << error;
+}
+
 bool MainWindow::readClockConfig()
 {
     if (!m_clockOperator.readClockConfig(&m_clock)) {
         return false;
     }
-
+    syncClockConfig();
+    getClockInfo();
     return true;
+}
+
+void MainWindow::syncClockConfig()
+{
+    ui->dateEdit->setDate(m_clock.getDate());
+    ui->timeEdit->setTime(m_clock.getTime());
+    ui->comboBox_ledmode->setCurrentIndex(m_clock.getLedMode());
+    ui->lineEditHsv->setText(QString::number(m_clock.getHsvMode()));
+    if (m_clock.getAlarmMode()) {
+        ui->checkBox->setChecked(true);
+    } else {
+        ui->checkBox->setChecked(false);
+    }
+    if (m_clock.getTimeFormat()) {
+        ui->radio_time_mode_24->setChecked(true);
+    } else {
+        ui->radio_time_mode_12->setChecked(true);
+    }
+    QTime alarm_time;
+    alarm_time.fromString(QString("%1:%2").arg(m_clock.getAlarmHours())
+        .arg(m_clock.getAlarmMinutes()));
+    ui->timeEdit_2->setTime(alarm_time);
+    ui->spinBox->setValue(m_clock.getNightHours());
+}
+
+void MainWindow::getClockInfo() {
+    QString str;
+    if (m_clockOperator.getClockInfo(&m_clock)) {
+        str = QString("Device: cuteClock v%1.%2 r%3").arg(m_clock.getVersionMajor())
+            .arg(m_clock.getVersionMinor()).arg(m_clock.getRevision());
+    } else {
+        str = QString("Device: unknown");
+    }
+    qDebug() << "Version:" << m_clock.getVersionMajor() << m_clock.getVersionMinor() <<
+        m_clock.getRevision();
+    ui->deviceInfo->setText(str);
 }

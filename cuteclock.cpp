@@ -63,12 +63,38 @@ void cuteClock::setHsvMode(int a_val) {
     m_hsvMode = a_val;
 };
 
-int cuteClock::getAlarmMode() const {
+int cuteClock::getRawAlarmMode() const
+{
     return m_hourAlarmMode;
 };
-void cuteClock::setAlarmMode(int a_val) {
+void cuteClock::setRawAlarmMode(int a_val)
+{
     m_hourAlarmMode = a_val;
 };
+
+int cuteClock::getAlarmMode() const {
+    return ((m_hourAlarmMode << ALARM_MODE_OFFSET) & ALARM_MODE_MASK);
+};
+
+void cuteClock::setAlarmMode(int a_val) {
+    m_hourAlarmMode |= ((a_val << ALARM_MODE_OFFSET) & ALARM_MODE_MASK)
+};
+bool cuteClock::getHourlyBeep() const
+{
+    return ((m_hourAlarmMode << BEEP_OFFSET) & BEEP_MASK);
+};
+void cuteClock::setHourlyBeep(int a_val)
+{
+    m_hourAlarmMode |= ((a_val << BEEP_OFFSET) & BEEP_MASK);
+}
+int cuteClock::getSunricePrerun() const
+{
+    return ((m_hourAlarmMode << SUNRISE_MODE_OFFSET) & SUNRISE_MODE_MASK);
+}
+void cuteClock::setSunricePrerun(int a_val)
+{
+    m_hourAlarmMode |= ((a_val << SUNRISE_MODE_OFFSET) & SUNRISE_MODE_MASK);
+}
 
 int cuteClock::getNightHours() const {
     return m_night_hours;

@@ -29,9 +29,12 @@ private slots:
     void clickedTestButton();
     void clickedGetFromPcButton();
     void clickedGetFromDeviceButton();
+    void clickedHsvButton();
     
 private:
     bool readClockConfig();
+    void syncClockConfig();
+    void getClockInfo();
     Ui::MainWindow *ui;
     QSerialPort m_serial;
     cuteClock m_clock;

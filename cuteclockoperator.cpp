@@ -74,10 +74,6 @@ bool cuteClockOperator::readClockConfig(cuteClock* clock) {
             clock->setHsvMode(values[1].toInt());
             continue;
         }
-        if (values[0].contains("h")) {
-            clock->setHsvMode(values[1].toInt());
-            continue;
-        }
         if (values[0].contains("b")) {
             clock->setAlarmMode(values[1].toInt());
             continue;
@@ -208,8 +204,10 @@ bool cuteClockOperator::sendCommand(QString& output, QString command)
 {
     if (!m_serial->isOpen())
         return false;
-    if (!command.isEmpty())
+    if (!command.isEmpty()) {
+        qDebug() << "Attempt to write data:" << command << " (" << command.length() << ") chars";
         m_serial->write(command.toUtf8());
+    }
     // Block until new data arrives
     // Wait for 5 seconds for new data
     int readbytes = 0;

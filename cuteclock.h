@@ -6,7 +6,12 @@
 
 #include "clockversion.h"
 
-//class clockVersion;
+#define ALARM_MODE_OFFSET 0x0
+#define ALARM_MODE_MASK 0x2
+#define SUNRISE_MODE_OFFSET 0x2
+#define SUNRISE_MODE_MASK 0x2
+#define BEEP_OFFSET 4
+#define BEEP_MASK 1
 
 class cuteClock
 {
@@ -54,8 +59,17 @@ public:
     int getHsvMode() const;
     void setHsvMode(int a_val);
 
+    int getRawAlarmMode() const;
+    void setRawAlarmMode(int a_val); // raw value
+
     int getAlarmMode() const;
     void setAlarmMode(int a_val);
+
+    bool getHourlyBeep() const;
+    void setHourlyBeep(int a_val);
+
+    int getSunricePrerun() const;
+    void setSunricePrerun(int a_val);
 
     int getNightHours() const;
     void setNightHours(int a_val);
