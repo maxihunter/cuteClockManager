@@ -10,8 +10,8 @@
 #define ALARM_MODE_MASK 0x2
 #define SUNRISE_MODE_OFFSET 0x2
 #define SUNRISE_MODE_MASK 0x2
-#define BEEP_OFFSET 4
-#define BEEP_MASK 1
+#define BEEP_OFFSET 0x4
+#define BEEP_MASK 0x1
 
 class cuteClock
 {

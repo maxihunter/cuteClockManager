@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
-    this->setFixedSize(QSize(640, 600));
+    this->setFixedSize(QSize(640, 510));
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     //ui->lineEditHsv->setReadOnly(true);
 
@@ -42,6 +42,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->button_getFromPc, &QPushButton::clicked, this, &MainWindow::clickedGetFromPcButton);
     connect(ui->button_getFromDevice, &QPushButton::clicked, this, &MainWindow::clickedGetFromDeviceButton);
     connect(ui->buttonCustomHsv, &QPushButton::clicked, this, &MainWindow::clickedHsvButton);
+    connect(ui->button_apply, &QPushButton::clicked, this, &MainWindow::clickedApplyButton);
+    //connect(ui->menuAbout, &QPushButton::clicked, this, &MainWindow::aboutAction);
+    ui->statusbar->showMessage(QString("Ln %1, Col %2"));
+
+    progressBar = new QProgressBar(ui->statusbar);
+    progressBar->setAlignment(Qt::AlignRight);
+    progressBar->setMaximumSize(180, 19);
+    ui->statusbar->addPermanentWidget(progressBar);
+    progressBar->setMaximum(0);
+    progressBar->setMinimum(0);
+    progressBar->setValue(0);
+    //progressBar->setValue(50);
+
 }
 
 MainWindow::~MainWindow()
@@ -120,13 +133,18 @@ void MainWindow::clickedGetFromDeviceButton()
 
 void MainWindow::clickedHsvButton()
 {
+    
+}
+
+void MainWindow::clickedApplyButton()
+{
     // For debug write config for now
     int led_mode = ui->comboBox_ledmode->currentIndex();
     int hsv_mode = ui->lineEditHsv->text().toInt();
     int beep = ui->checkBox->isChecked();
     m_clock.setLedMode(led_mode);
     m_clock.setHsvMode(hsv_mode);
-    m_clock...setHsvMode(hsv_mode);
+    m_clock.setHourlyBeep(beep);
     int error = 0;
     if (!m_clockOperator.setLEDMode(&m_clock)) {
         error = 1;
@@ -134,7 +152,24 @@ void MainWindow::clickedHsvButton()
     if (!m_clockOperator.setHSVMode(&m_clock)) {
         error = 1;
     }
+    if (!m_clockOperator.setHSVMode(&m_clock)) {
+        error = 1;
+    }
+    if (!error) {
+        QMessageBox::information(this, "Ok", "Clock configuration applied successfully!",
+            QMessageBox::Ok);
+    } else {
+        QMessageBox::critical(this, "Error", "Clock configuration write failed", QMessageBox::Ok);
+    }
     qDebug() << "returnCode=" << error;
+}
+
+void MainWindow::aboutAction()
+{
+    QMessageBox::about(this, tr("About Application"),
+        tr("The <b>Application</b> example demonstrates how to "
+            "write modern GUI applications using Qt, with a menu bar, "
+            "toolbars, and a status bar."));
 }
 
 bool MainWindow::readClockConfig()
@@ -163,6 +198,9 @@ void MainWindow::syncClockConfig()
     } else {
         ui->radio_time_mode_12->setChecked(true);
     }
+    ui->checkBox->setChecked(m_clock.getHourlyBeep());
+    ui->comboBox_alarmmode->setCurrentIndex(m_clock.getAlarmMode());
+    ui->comboBox_sunriseprerun->setCurrentIndex(m_clock.getSunricePrerun());
     QTime alarm_time;
     alarm_time.fromString(QString("%1:%2").arg(m_clock.getAlarmHours())
         .arg(m_clock.getAlarmMinutes()));

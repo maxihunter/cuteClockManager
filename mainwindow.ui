@@ -291,6 +291,19 @@
      <string>Device:</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="button_apply">
+        <property name="text">
+         <string>Apply Configuration</string>
+        </property>
+        <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>440</y>
+      <width>150</width>
+      <height>25</height>
+     </rect>
+    </property>
+       </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>

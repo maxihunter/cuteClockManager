@@ -77,7 +77,7 @@ int cuteClock::getAlarmMode() const {
 };
 
 void cuteClock::setAlarmMode(int a_val) {
-    m_hourAlarmMode |= ((a_val << ALARM_MODE_OFFSET) & ALARM_MODE_MASK)
+    m_hourAlarmMode |= ((a_val << ALARM_MODE_OFFSET) & ALARM_MODE_MASK);
 };
 bool cuteClock::getHourlyBeep() const
 {

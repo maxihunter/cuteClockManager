@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QProgressBar>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QDebug>
@@ -30,12 +31,16 @@ private slots:
     void clickedGetFromPcButton();
     void clickedGetFromDeviceButton();
     void clickedHsvButton();
+    void clickedApplyButton();
+    void aboutAction();
     
 private:
     bool readClockConfig();
     void syncClockConfig();
     void getClockInfo();
     Ui::MainWindow *ui;
+    QProgressBar* progressBar;
+
     QSerialPort m_serial;
     cuteClock m_clock;
     cuteClockOperator m_clockOperator;
